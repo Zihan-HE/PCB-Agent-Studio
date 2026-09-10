@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CircuitMind PCB Agent Studio
 
-## Getting Started
+CircuitMind PCB Agent Studio is a presentation-ready workspace for agent-assisted PCB engineering. The current release translates natural-language requirements into structured design intent; the product shell also reserves a clear integration point for future routing, trace generation, and engineering-validation agents.
 
-First, run the development server:
+## What the demo includes
+
+- Three anonymized scenarios covering BGA connection repair, PCIe constraint understanding, and routing trade-off judgment
+- Structured target component, pin, net, constraint, and priority outputs
+- A board-evidence visualization that highlights targets and risk regions without claiming to generate a physical route
+- A local heuristic preview for custom text input
+- Responsive desktop and mobile layouts
+
+The displayed benchmark figures describe a fixed validation snapshot. They are not per-request confidence scores. Production model weights, credentials, endpoints, private board files, and routing-agent implementations are not included in this repository.
+
+## Run locally
+
+Requirements: Node.js 20 or later and npm.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Quality checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Current integration boundary
 
-To learn more about Next.js, take a look at the following resources:
+Validation scenarios replay anonymized, checked results. Edited or custom text is parsed by a transparent local preview so the interface remains demonstrable without a backend. Connect the production intent-model API at deployment time; do not commit its URL or credentials.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The Agent Routing tab is intentionally a placeholder. The evidence diagram marks relevant pads, nets, and risk areas, but it does not represent an automatically generated PCB trace.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Repository safety
 
-## Deploy on Vercel
+Environment files, build output, dependencies, certificates, and local agent test helpers are ignored by Git. Before publishing changes, review staged content with:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git diff --cached
+git status --short
+```

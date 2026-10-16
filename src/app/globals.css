@@ -206,6 +206,8 @@ a:focus-visible {
   letter-spacing: 0.12em;
 }
 
+.pic-mobile-entry { display: none; }
+
 .module-nav {
   display: flex;
   align-items: stretch;
@@ -1271,6 +1273,9 @@ a:focus-visible {
 }
 
 @media (max-width: 1180px) {
+  .pic-mobile-entry { display: inline-flex; color: #bdf455; font-size: 12px; }
+  .topbar .system-state { display: none; }
+
   .topbar {
     grid-template-columns: 1fr auto;
   }

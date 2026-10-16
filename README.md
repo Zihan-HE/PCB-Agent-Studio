@@ -14,6 +14,25 @@ The displayed benchmark figures describe a fixed validation snapshot. They are n
 
 ## Run locally
 
+### PIC photonic design workspace
+
+Open `/pic` (or use **PIC 光子设计** in the main navigation). The new workspace
+includes three saved GDS cases: a single-bus ring, a thermal MZM, and an 8-QAM
+reference layout. It provides layer controls, zoom/pan, workflow replay, artifact
+records, and GDS downloads. Desktop and mobile views are supported.
+
+This is a **saved-case showcase**, not a live LLM backend. Custom prompts are
+exportable as pending requests and are never presented as newly generated GDS.
+The page explicitly reports verification scope and includes source attribution.
+See `public/pic/README.md` for provenance and license details. The existing PCB
+workspace remains at `/`.
+
+To regenerate browser geometry from local source files, use the Python utility
+`scripts/export_pic_assets.py --source-root /path/to/PICasso` in an environment
+with `gdstk`. Normal website deployment needs only Node; Python is not required.
+
+### Start the website
+
 Requirements: Node.js 20 or later and npm.
 
 ```bash

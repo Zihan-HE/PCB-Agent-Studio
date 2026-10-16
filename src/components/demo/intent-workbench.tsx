@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   startTransition,
   useEffect,
@@ -364,7 +366,9 @@ export function IntentWorkbench() {
           <span className="brand__name">CIRCUIT<span>MIND</span></span>
           <span className="brand__edition">PCB AI / 01</span>
         </a>
+        <Link className="pic-mobile-entry" href="/pic">PIC 光子设计 ↗</Link>
         <nav className="module-nav" aria-label="产品模块">
+          <Link className="module-nav__item" href="/pic"><LayersIcon />PIC 光子设计</Link>
           <button className="module-nav__item module-nav__item--active" type="button">
             <SparklesIcon />
             意图理解

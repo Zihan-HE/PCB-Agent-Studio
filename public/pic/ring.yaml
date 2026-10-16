@@ -1,0 +1,18 @@
+name: manual_single_bus_ring
+instances:
+  ring1:
+    component: ring_single
+    settings:
+      radius: 10.0
+      gap: 0.2
+      length_x: 4.0
+      length_y: 0.6
+      cross_section: strip
+placements:
+  ring1:
+    x: 0.0
+    y: 0.0
+routes: {}
+ports:
+  input: ring1,o1
+  through: ring1,o2

@@ -5,8 +5,8 @@ import { ThemeProvider } from "@/components/demo/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "CircuitMind · PCB 设计意图智能",
-  description: "将 PCB 工程指令编译为可审计的任务类型、目标对象、设计约束与决策优先级。",
+  title: "CircuitMind · PCB 与 PIC 设计工作台",
+  description: "PCB 设计意图解析与 PIC 光子设计展示：从自然语言需求到结构化任务和可查看的版图产物。",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="zh-CN" className="h-full antialiased" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <ThemeProvider>
           {children}

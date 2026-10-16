@@ -1,5 +1,10 @@
 # CircuitMind PCB Agent Studio
 
+[打开 PIC 设计工作台 / Live PIC demo](https://zihan-he.github.io/PCB-Agent-Studio/pic/)
+
+The public website is deployed from `feat/pic-design-showcase` using GitHub Pages.
+The **Publish design studio** Actions run reports deployment status.
+
 CircuitMind PCB Agent Studio is a presentation-ready workspace for agent-assisted PCB engineering. The current release translates natural-language requirements into structured design intent; the product shell also reserves a clear integration point for future routing, trace generation, and engineering-validation agents.
 
 ## What the demo includes
@@ -17,9 +22,13 @@ The displayed benchmark figures describe a fixed validation snapshot. They are n
 ### PIC photonic design workspace
 
 Open `/pic` (or use **PIC 光子设计** in the main navigation). The new workspace
-includes three saved GDS cases: a single-bus ring, a thermal MZM, and an 8-QAM
+includes three saved GDS cases: a single-bus ring, an MZM, and an 8-QAM
 reference layout. It provides layer controls, zoom/pan, workflow replay, artifact
 records, and GDS downloads. Desktop and mobile views are supported.
+The CAD-style viewer now changes with each selectable construction stage:
+placement outlines, optical devices, waveguide routing, process layers, final layout.
+Pause, single-step, replay and playback speed are available. Intermediate views
+are reconstructed from actual final-GDS hierarchy, not historical solver snapshots.
 
 This is a **saved-case showcase**, not a live LLM backend. Custom prompts are
 exportable as pending requests and are never presented as newly generated GDS.

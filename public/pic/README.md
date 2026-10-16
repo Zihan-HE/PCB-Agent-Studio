@@ -1,6 +1,10 @@
 # PIC showcase artifacts
 
 These files are real exported GDS layouts, not browser-generated mock geometry.
+The viewer selects the physical design root, excluding KLayout's
+`$$$CONTEXT_INFO$$$` metadata catalog. The original downloadable GDS is preserved.
+Construction stages are a presentation reconstructed from final GDS hierarchy;
+they are not recorded intermediate results of an online AI run.
 Each JSON contains flattened polygons, units, bounds, source provenance, SHA-256
 of the corresponding GDS, and explicit verification status.
 

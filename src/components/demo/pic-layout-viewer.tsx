@@ -35,7 +35,7 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
     });
     return [...buckets.values()].map(bucket => ({ ...bucket,layer:layer.id,d:bucket.paths.join("") }));
   }).sort((a,b) => Number(a.layer === "1/0")-Number(b.layer === "1/0")),[geometry,width,x0]);
-  const shown=segments.filter(s=>s.stage<=geometryStep&&visible.includes(s.layer)&&!(step===2&&s.stage===2&&s.band>3));
+  const shown=segments.filter(s=>s.stage<=geometryStep&&visible.includes(s.layer));
   const visibleCount = shown.reduce((sum,s) => sum+s.count,0);
   return <div className="pic-viewer" data-design-stage={step} data-visible-polygons={visibleCount}>
     <div className="pic-canvas-caption"><span>TOP / {geometry.cell}</span><span>{step === 0 ? "PLACEMENT OUTLINE" : STAGES[step].english.toUpperCase()}</span></div>
@@ -50,9 +50,9 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
       setCursor({x:((px-pan.x-centerX)/zoom+centerX)*unit,y:-((py-pan.y-centerY)/zoom+centerY)*unit});
       if(drag.current) setPan({x:drag.current.originX+(e.clientX-drag.current.x)*scale,y:drag.current.originY+(e.clientY-drag.current.y)*scale});
     }} onPointerUp={() => {drag.current=null;}} onPointerCancel={() => {drag.current=null;}} onPointerLeave={() => setCursor(null)}>
-      <defs>{geometry.layers.map(layer => <pattern key={layer.id} id={`${id}-${layer.id.replace("/","-")}`} patternUnits="userSpaceOnUse" width={width/65} height={width/65} patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2={width/65} stroke={layerStyle(layer.id).color} strokeWidth={width/450}/></pattern>)}</defs>
+      <defs><clipPath id={`${id}-route-progress`}><rect x={x0-padding} y={-y1-padding} width={width*.5+padding} height={viewHeight}/></clipPath>{geometry.layers.map(layer => <pattern key={layer.id} id={`${id}-${layer.id.replace("/","-")}`} patternUnits="userSpaceOnUse" width={width/65} height={width/65} patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2={width/65} stroke={layerStyle(layer.id).color} strokeWidth={width/450}/></pattern>)}</defs>
       <g transform={`translate(${pan.x} ${pan.y}) translate(${centerX} ${centerY}) scale(${zoom}) translate(${-centerX} ${-centerY})`}>
-        {shown.map(segment => <g key={`${segment.layer}-${segment.stage}-${segment.band}`} className={segment.stage===geometryStep&&playing ? "pic-build-piece" : ""} style={{animationDelay:`${segment.band*90}ms`}}>
+        {shown.map(segment => <g key={`${segment.layer}-${segment.stage}-${segment.band}`} clipPath={step===2&&segment.stage===2?`url(#${id}-route-progress)`:undefined} className={segment.stage===geometryStep&&playing ? "pic-build-piece" : ""} style={{animationDelay:`${segment.band*90}ms`}}>
           <path d={segment.d} fill={segment.layer==="1/0" ? layerStyle(segment.layer).color : `url(#${id}-${segment.layer.replace("/","-")})`} fillRule="nonzero" stroke={layerStyle(segment.layer).color} strokeWidth={segment.layer==="1/0" ? .6 : .35} vectorEffect="non-scaling-stroke" opacity={segment.layer==="1/0" ? 1 : .72}/>
         </g>)}
         {(step===0||showLabels)&&geometry.parts.map(part => {

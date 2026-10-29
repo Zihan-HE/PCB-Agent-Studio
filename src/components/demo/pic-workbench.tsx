@@ -8,11 +8,11 @@ import { LayoutViewer } from "./pic-layout-viewer";
 import { RepairShowcase } from "./pic-repair-showcase";
 
 export function PicWorkbench() {
-  const [selected,setSelected]=useState(3);
-  const [prompt,setPrompt]=useState<string>(CASES[3].prompt);
+  const [selected,setSelected]=useState(2);
+  const [prompt,setPrompt]=useState<string>(CASES[2].prompt);
   const [geometry,setGeometry]=useState<Geometry|null>(null);
   const [error,setError]=useState("");
-  const [step,setStep]=useState(6);
+  const [step,setStep]=useState(3);
   const [playing,setPlaying]=useState(false);
   const [visible,setVisible]=useState<string[]>([]);
   const [zoom,setZoom]=useState(1);
@@ -31,7 +31,7 @@ export function PicWorkbench() {
   },[sample.id]);
   useEffect(()=>{
     if(!playing)return;
-    const timer=window.setTimeout(()=>{if(step<6)setStep(step+1);else setPlaying(false);},2600/speed);
+    const timer=window.setTimeout(()=>{if(step<3)setStep(step+1);else setPlaying(false);},2600/speed);
     return ()=>window.clearTimeout(timer);
   },[playing,step,speed]);
   function choose(index:number){
@@ -68,12 +68,12 @@ export function PicWorkbench() {
             <div className="pic-layer-options"><label><input type="checkbox" checked={showLabels} onChange={e=>setShowLabels(e.target.checked)}/>单元标注</label><button onClick={()=>setVisible(["1/0"])}>只看光路</button><button onClick={()=>setVisible(geometry?.layers.map(l=>l.id)??[])}>显示全部图层</button></div>
             <div className="pic-properties"><h3>设计属性</h3>{sample.parameters.map(([key,value])=><div key={key}><span>{key}</span><b>{value}</b></div>)}<div><span>边界尺寸</span><b>{geometry?`${((geometry.bounds[1][0]-geometry.bounds[0][0])*geometry.unitMeters*1e6).toFixed(1)} × ${((geometry.bounds[1][1]-geometry.bounds[0][1])*geometry.unitMeters*1e6).toFixed(1)}`:"—"} μm</b></div></div>
           </aside></div>
-          <div className="pic-artifact-bar"><span><i/>{step===6?"完整设计":STAGES[step].name}<small>{geometry?.polygonCount.toLocaleString("en-US")??"—"} polygons / {geometry?.layers.length??"—"} layers</small></span><a href={assetPath(`/pic/${sample.id}.gds`)} download={`${sample.id}.gds`}><ArrowDownToLine size={14}/>下载完整 GDS <small>{geometry?`${(geometry.bytes/1024).toFixed(1)} KB`:""}</small></a></div>
+          <div className="pic-artifact-bar"><span><i/>{step===3?"完整设计":STAGES[step].name}<small>{geometry?.polygonCount.toLocaleString("en-US")??"—"} polygons / {geometry?.layers.length??"—"} layers</small></span><a href={assetPath(`/pic/${sample.id}.gds`)} download={`${sample.id}.gds`}><ArrowDownToLine size={14}/>下载完整 GDS <small>{geometry?`${(geometry.bytes/1024).toFixed(1)} KB`:""}</small></a></div>
         </div>
       </section>
-      <section className="pic-process"><div className="pic-process-heading"><div><strong>设计过程</strong><span aria-live="polite">{playing?"播放中":step===6?"已到最终版图":"可选择阶段查看"} · {step+1} / 7</span></div><div className="pic-playback"><label>速度<select aria-label="播放速度" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option></select></label><button aria-label={playing?"暂停回放":"继续回放"} disabled={!geometry} onClick={()=>{if(step===6)setStep(0);setPlaying(!playing);setTab("layout");}}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?"暂停":"播放"}</button><button aria-label="下一步" disabled={step===6||!geometry} onClick={()=>{setPlaying(false);setStep(s=>Math.min(6,s+1));setTab("layout");}}><StepForward size={14}/>单步</button><button aria-label="重置过程" onClick={()=>{setStep(0);setPlaying(false);setTab("layout");}}><RotateCcw size={14}/></button></div></div>
+      <section className="pic-process"><div className="pic-process-heading"><div><strong>设计过程</strong><span aria-live="polite">{playing?"播放中":step===3?"已到原生版图":"可选择阶段查看"} · {step+1} / 4</span></div><div className="pic-playback"><label>速度<select aria-label="播放速度" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option></select></label><button aria-label={playing?"暂停回放":"继续回放"} disabled={!geometry} onClick={()=>{if(step===3)setStep(0);setPlaying(!playing);setTab("layout");}}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?"暂停":"播放"}</button><button aria-label="下一步" disabled={step===3||!geometry} onClick={()=>{setPlaying(false);setStep(s=>Math.min(3,s+1));setTab("layout");}}><StepForward size={14}/>单步</button><button aria-label="重置过程" onClick={()=>{setStep(0);setPlaying(false);setTab("layout");}}><RotateCcw size={14}/></button></div></div>
         <ol>{STAGES.map((stage,index)=><li key={stage.name}><button className={step===index?"current":step>index?"complete":""} aria-current={step===index?"step":undefined} onClick={()=>{setStep(index);setPlaying(false);setTab("layout");}}><span>{step>index?<Check size={13}/>:String(index+1).padStart(2,"0")}</span><div><strong>{stage.name}</strong><small>{stage.detail}</small></div></button></li>)}</ol>
-        <div className="pic-event-log"><code>{String(step+1).padStart(2,"0")} / {STAGES[step].english}</code><p>{sample.id==='filterbank'?sample.events[step]:STAGES[step].detail}</p><span>几何构建演示</span></div>
+        <div className="pic-event-log"><code>{String(step+1).padStart(2,"0")} / {STAGES[step].english}</code><p>{STAGES[step].detail}</p><span>保存成果查看</span></div>
       </section>
       <RepairShowcase />
       <details className="pic-credits"><summary>项目说明</summary><p>SpecPDA 是项目组设计的版图修复流程，展示内容包括缺陷定位、局部几何修改与复检。设计区提供参数化电路、层级结构和 GDS 交付；修复区选取结构不同且已完成修复的代表案例。设计动画按保存几何重建，修复动画使用实际归档输入与输出。</p></details>

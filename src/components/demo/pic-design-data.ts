@@ -30,13 +30,10 @@ export const CASES = [
 ] as const;
 
 export const STAGES = [
-  { name: "规格解析", english: "Specification", detail: "核对参数与电路拓扑" },
-  { name: "器件实例", english: "Instances", detail: "构建层级化器件单元" },
-  { name: "互连展开", english: "Interconnect", detail: "分段展开波导几何" },
-  { name: "波导布线", english: "Routing", detail: "显示完整连接路径" },
-  { name: "工艺图层", english: "Layers", detail: "展开工艺层与辅助层" },
-  { name: "几何核对", english: "Geometry", detail: "读取尺寸与单元边界" },
-  { name: "GDS 交付", english: "Export", detail: "导出层级 GDS 与参数" },
+  { name: "设计参数", english: "Specification", detail: "核对参数与电路拓扑" },
+  { name: "器件层级", english: "Hierarchy", detail: "查看光学器件单元" },
+  { name: "完整光路", english: "Layout", detail: "显示完整波导及工艺图层" },
+  { name: "KLayout 查看", english: "Native GDS", detail: "直接读取 GDS 的原生渲染图" },
 ] as const;
 
 export type Geometry = {

@@ -38,9 +38,20 @@ for item in gallery['cases']:
     added=regions[1]-regions[0];removed=regions[0]-regions[1];delta=added+removed
     if delta.is_empty():raise RuntimeError('No geometric change: '+ident)
     dbu=layout.dbu
+    if data.get('evidenceKind')=='engineering_demo':
+        width_limit=round(data['limits']['width']/dbu)
+        checks=[]
+        for r in regions:
+            checks.append({'minWidthMarkers':r.width_check(width_limit).size(),'connectedComponents':r.count()})
+        data['checks']={'engine':'KLayout '+app.version(),'minimumWidthUm':data['limits']['width'],'before':checks[0],'after':checks[1],'scope':'Minimum width and geometric continuity only; no optical simulation or foundry signoff.'}
+        data['initial']=checks[0]['minWidthMarkers']+max(0,checks[0]['connectedComponents']-1)
+        data['residual']=checks[1]['minWidthMarkers']+max(0,checks[1]['connectedComponents']-1)
+        data['connectivity']='passed' if checks[1]['connectedComponents']==1 else 'failed'
+        if data['residual']!=0:raise RuntimeError('Engineering candidate failed checks: '+ident+' '+str(checks))
     def dump(r):return [[[round(p.x*dbu,6),round(p.y*dbu,6)] for p in poly.each_point_hull()] for poly in r.each()]
     b=delta.bbox();pad=max(b.width(),b.height(),300)*.7
     data['delta']={'added':dump(added),'removed':dump(removed),'addedArea':added.area()*dbu*dbu,'removedArea':removed.area()*dbu*dbu,'bounds':[(b.left-pad)*dbu,(b.bottom-pad)*dbu,(b.width()+2*pad)*dbu,(b.height()+2*pad)*dbu],'dbu':dbu}
+    if 'detailBounds' in data:data['delta']['bounds']=data['detailBounds']
     path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':')),encoding='utf8')
     for state in ['before','after']:
         view,ly,cell=open_view(root/'repair'/(ident+'-'+state+'.gds'))

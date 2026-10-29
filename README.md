@@ -2,10 +2,16 @@
 
 [打开 PIC 设计工作台 / Live PIC demo](https://zihan-he.github.io/PCB-Agent-Studio/pic/)
 
-The PIC page also includes the complete 40-task archived SpecPDA geometry repair
-run, with before/after GDS, actual KLayout markers, local-region inspection and
-recheck status. 16/40 cases are clean under the stated mock rule deck; this is
-not foundry signoff. The source experiment directory is read-only to the exporter.
+The PIC repair gallery now presents curved layouts only: a retained archived
+double-ring repair and two explicitly labelled local engineering demonstrations
+(MZI port discontinuity and S-bend cross-section mismatch). The engineering
+examples run deterministic, website-local repair operations and actual KLayout
+minimum-width / connected-component checks; they are not archived SpecPDA
+benchmark results, optical simulation, or foundry signoff. The earlier complete
+archive remains in the repository for provenance but is not the active gallery.
+The source experiment directory remains read-only to all exporters.
+Case requests use a version key and strict validation so a stale or malformed
+JSON response produces a recoverable case-level error rather than a page crash.
 The ring example now uses a circular 10 μm-radius ring (0.5 μm waveguide, 0.2 μm gap).
 
 The public website is deployed from `feat/pic-design-showcase` using GitHub Pages.

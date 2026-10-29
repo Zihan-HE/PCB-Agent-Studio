@@ -1,53 +1,20 @@
 {
   "cases": [
     {
-      "id": "case_0200e0f7cd2bae61c89d",
-      "device": "四通道波导走线",
-      "fault": "局部凹口",
-      "success": true,
-      "initial": 2,
-      "residual": 0
+      "id": "eng_curved_mzi_gap",
+      "device": "圆弧双臂 MZI",
+      "fault": "输入端口间断"
+    },
+    {
+      "id": "eng_s_bend_cross_section",
+      "device": "圆弧 S 弯连接波导",
+      "fault": "横截面参数错误"
     },
     {
       "id": "case_0437b4b95887c158db3b",
-      "device": "双微环级联滤波结构",
-      "fault": "线宽不足",
-      "success": true,
-      "initial": 3,
-      "residual": 0
-    },
-    {
-      "id": "case_04da599051081cf76a0e",
-      "device": "双臂 MZI",
-      "fault": "局部凹口",
-      "success": true,
-      "initial": 2,
-      "residual": 0
-    },
-    {
-      "id": "case_056afb104e8a05df4864",
-      "device": "双通道耦合走线",
-      "fault": "局部凹口",
-      "success": true,
-      "initial": 2,
-      "residual": 0
-    },
-    {
-      "id": "case_07a03d1572e69de1f5de",
-      "device": "耦合器引出波导",
-      "fault": "双处窄颈",
-      "success": true,
-      "initial": 4,
-      "residual": 0
-    },
-    {
-      "id": "case_089c6900b12258858eda",
-      "device": "蛇形延迟波导",
-      "fault": "线宽不足",
-      "success": true,
-      "initial": 5,
-      "residual": 0
+      "device": "圆弧双微环级联",
+      "fault": "线宽不足"
     }
   ],
-  "selection": "Distinct successful examples, not a population success-rate evaluation."
+  "selection": "Curved layouts only. Two new engineering demonstrations are labelled separately from archived algorithm runs."
 }

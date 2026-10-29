@@ -1,4 +1,4 @@
-name: manual_single_bus_ring
+name: archived_racetrack_example_not_current_ring
 instances:
   ring1:
     component: ring_single

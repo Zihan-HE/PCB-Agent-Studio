@@ -10,7 +10,7 @@ of the corresponding GDS, and explicit verification status.
 
 | ID | Origin | What has been checked |
 | --- | --- | --- |
-| ring | Local YAML example using gdsfactory generic_tech | YAML pilot, layout generation, GDS parsing |
+| ring | Local circular single-bus ring generated with gdstk; R=10 um, width=0.5 um, gap=0.2 um | GDS generation and parsing; not optical validation |
 | mzm | PICasso reference notebook, cell 4; local API-compatible replay | Layout generation, GDS parsing |
 | qam | PICasso reference notebook, cell 6; local API-compatible replay | Layout generation, GDS parsing |
 
@@ -27,3 +27,10 @@ gdsfactory: https://github.com/gdsfactory/gdsfactory (MIT).
 Project-group contributions in this module: web integration, interactive geometry
 viewer, workflow presentation, artifact export and traceable delivery.
 Reference designs are not claimed as original project-group research.
+
+Repair showcase: all 40 archived photonic trials from
+SpecPDA-drc-repair/runs/drc-repair-v1-final. 16 are DRC-clean under the
+specpda.mock_geometry@1.0.0 test deck, 24 retain violations. This is deterministic
+local geometry search, not an LLM execution trace or foundry signoff.
+scripts/export_repair_showcase.py only reads the source archive and verifies
+input hashes afterward. Copied geometry and redacted records are under repair/.

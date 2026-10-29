@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ArrowDownToLine, Check, Code2, FolderOpen, Layers, Pause, Play, RotateCcw, StepForward, Waves } from "lucide-react";
 import { assetPath, CASES, Geometry, layerStyle, STAGES } from "./pic-design-data";
 import { LayoutViewer } from "./pic-layout-viewer";
+import { RepairShowcase } from "./pic-repair-showcase";
 
 export function PicWorkbench() {
   const [selected,setSelected]=useState(0);
@@ -43,7 +44,7 @@ export function PicWorkbench() {
     const a=document.createElement("a");a.href=url;a.download="pic-design-request.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
   return <div className="pic-app">
-    <header className="pic-header"><Link href="/" className="pic-brand"><Waves size={21}/><strong>CircuitMind</strong><span>Design Studio</span></Link><nav aria-label="设计领域"><Link href="/">PCB</Link><Link href="/pic" aria-current="page">PIC 设计</Link></nav><a className="pic-repo" href="https://github.com/Zihan-HE/PCB-Agent-Studio" target="_blank" rel="noreferrer">GitHub ↗</a></header>
+    <header className="pic-header"><Link href="/" className="pic-brand"><Waves size={21}/><strong>CIRCUITMIND</strong><span>PIC ENGINEERING</span></Link><nav aria-label="设计领域"><Link href="/">意图理解</Link><Link href="/pic" aria-current="page">PIC 光子设计</Link><a href="#repair">版图修复</a></nav><a className="pic-repo" href="https://github.com/Zihan-HE/PCB-Agent-Studio" target="_blank" rel="noreferrer">GitHub ↗</a></header>
     <main className="pic-shell">
       <div className="pic-title"><div><span>WORKSPACE / PHOTONICS</span><h1>AI辅助PIC设计和验证展示</h1></div><p>从设计需求，到器件放置、波导连接与完整 GDS。<small>保存案例演示 · 基于真实 GDS 层级重建</small></p></div>
       <section className="pic-workspace">
@@ -74,7 +75,8 @@ export function PicWorkbench() {
         <ol>{STAGES.map((stage,index)=><li key={stage.name}><button className={step===index?"current":step>index?"complete":""} aria-current={step===index?"step":undefined} onClick={()=>{setStep(index);setPlaying(false);setTab("layout");}}><span>{step>index?<Check size={13}/>:String(index+1).padStart(2,"0")}</span><div><strong>{stage.name}</strong><small>{stage.detail}</small></div></button></li>)}</ol>
         <div className="pic-event-log"><code>{String(step+1).padStart(2,"0")} / {STAGES[step].english}</code><p>{sample.events[step]}</p><span>几何构建演示</span></div>
       </section>
-      <details className="pic-credits"><summary>项目说明与开源来源</summary><p>项目组实现网页工作台、分层查看、构建过程演示及 GDS 交付。参考设计基于 <a href="https://github.com/ACADLab/PICasso" target="_blank" rel="noreferrer">PICasso（ACADLab）</a> 和 gdsfactory；<a href={assetPath("/pic/PICasso-LICENSE.txt")}>MIT 许可</a>。MZM、8-QAM 为作者 notebook 的本地回放，微环为本地 YAML 案例。过程展示由最终 GDS 重建；未连接在线 LLM、实时仿真或完整 DRC 签核。</p></details>
+      <RepairShowcase />
+      <details className="pic-credits"><summary>项目说明与开源来源</summary><p>项目组实现网页工作台、分层查看、构建过程演示及 GDS 交付。参考设计基于 <a href="https://github.com/ACADLab/PICasso" target="_blank" rel="noreferrer">PICasso（ACADLab）</a> 和 gdsfactory；<a href={assetPath("/pic/PICasso-LICENSE.txt")}>MIT 许可</a>。MZM、8-QAM 为作者 notebook 的本地回放，圆形微环为本地参数化 GDS。设计过程由最终 GDS 重建；修复部分展示 SpecPDA 已归档的实际运行结果。</p></details>
     </main><footer className="pic-footer"><span>CircuitMind / Photonic Design</span><span>GDSII · μm · generic_tech</span><Link href="/">PCB 工作台 ↗</Link></footer>
   </div>;
 }

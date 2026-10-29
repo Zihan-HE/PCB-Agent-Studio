@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PicWorkbench } from "@/components/demo/pic-workbench";
 import "./pic.css";
+import "./engineering.css";
 
 export const metadata: Metadata = {
   title: "AI辅助PIC设计和验证展示",

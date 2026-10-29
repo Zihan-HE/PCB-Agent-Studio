@@ -56,13 +56,13 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
         {(step===0||showLabels)&&geometry.parts.map(part => {
           const [[ax,ay],[bx,by]]=part.bounds, pad=labelSize*.6;
           return <g key={part.id} className="pic-cell-outline">
-            {step===0&&<rect x={ax-pad} y={-by-pad} width={bx-ax+pad*2} height={by-ay+pad*2} fill="#ffffff03" stroke="#818998" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeDasharray="5 4"/>}
+            {step===0&&(geometry.id==='ring'?<g fill="none" stroke="#a2b29c" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeDasharray="5 4"><circle cx="0" cy="-10.7" r="10"/><path d="M-14,0H14"/></g>:<rect x={ax-pad} y={-by-pad} width={bx-ax+pad*2} height={by-ay+pad*2} fill="#ffffff03" stroke="#818998" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeDasharray="5 4"/>)}
             <text x={(ax+bx)/2} y={-by-labelSize*.9} textAnchor="middle" fontSize={labelSize} fill={step===0 ? "#b1b9c6" : "#a7aeb8"}>{part.id}</text>
           </g>;
         })}
-        {step>=4&&<g stroke="#747d8b" strokeWidth=".7" vectorEffect="non-scaling-stroke"><path d={`M${x0},${-y0+padding*.45}H${x1}M${x0},${-y0+padding*.3}v${padding*.3}M${x1},${-y0+padding*.3}v${padding*.3}`} fill="none"/><text x={centerX} y={-y0+padding*.8} stroke="none" fill="#a7adb6" fontSize={labelSize*.8} textAnchor="middle">{(width*unit).toFixed(1)} μm</text></g>}
+        {step>=4&&<g stroke="#747d8b" strokeWidth=".7"><path vectorEffect="non-scaling-stroke" d={`M${x0},${-y0+padding*.45}H${x1}M${x0},${-y0+padding*.3}v${padding*.3}M${x1},${-y0+padding*.3}v${padding*.3}`} fill="none"/><text x={centerX} y={-y0+padding*.8} stroke="none" fill="#a7adb6" fontSize={labelSize*.8} textAnchor="middle">{(width*unit).toFixed(1)} μm</text></g>}
       </g>
-      <g transform={`translate(${x0-padding*.5} ${-y0+padding*.95})`} stroke="#8e98a7" strokeWidth="1" vectorEffect="non-scaling-stroke"><path d={`M0,${-labelSize*.3}V0H${scaleLength/unit*zoom}v${-labelSize*.3}`} fill="none"/><text x="0" y={-labelSize*.7} fill="#8e98a7" stroke="none" fontSize={labelSize*.75}>{scaleLength} μm</text></g>
+      <g transform={`translate(${x0-padding*.5} ${-y0+padding*.95})`} stroke="#8e98a7" strokeWidth="1"><path vectorEffect="non-scaling-stroke" d={`M0,${-labelSize*.3}V0H${scaleLength/unit*zoom}v${-labelSize*.3}`} fill="none"/><text x="0" y={-labelSize*.7} fill="#8e98a7" stroke="none" fontSize={labelSize*.75}>{scaleLength} μm</text></g>
     </svg>
     {step===0&&<div className="pic-floorplan-note">器件范围与放置规划<span>{geometry.parts.length} 个主要模块 · 物理位置来自 GDS</span></div>}
     <div className="pic-canvas-bottom"><span/><div className="pic-zoom"><button aria-label="缩小版图" onClick={() => setZoom(Math.max(.5,zoom-.25))}><Minus size={15}/></button><span>{Math.round(zoom*100)}%</span><button aria-label="放大版图" onClick={() => setZoom(Math.min(5,zoom+.25))}><Plus size={15}/></button><button aria-label="适合窗口" onClick={() => {setZoom(1);setPan({x:0,y:0});}}><Maximize2 size={15}/></button></div></div>

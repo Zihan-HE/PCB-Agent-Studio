@@ -8,11 +8,11 @@ import { LayoutViewer } from "./pic-layout-viewer";
 import { RepairShowcase } from "./pic-repair-showcase";
 
 export function PicWorkbench() {
-  const [selected,setSelected]=useState(0);
-  const [prompt,setPrompt]=useState<string>(CASES[0].prompt);
+  const [selected,setSelected]=useState(3);
+  const [prompt,setPrompt]=useState<string>(CASES[3].prompt);
   const [geometry,setGeometry]=useState<Geometry|null>(null);
   const [error,setError]=useState("");
-  const [step,setStep]=useState(0);
+  const [step,setStep]=useState(6);
   const [playing,setPlaying]=useState(false);
   const [visible,setVisible]=useState<string[]>([]);
   const [zoom,setZoom]=useState(1);
@@ -31,7 +31,7 @@ export function PicWorkbench() {
   },[sample.id]);
   useEffect(()=>{
     if(!playing)return;
-    const timer=window.setTimeout(()=>{if(step<4)setStep(step+1);else setPlaying(false);},2600/speed);
+    const timer=window.setTimeout(()=>{if(step<6)setStep(step+1);else setPlaying(false);},2600/speed);
     return ()=>window.clearTimeout(timer);
   },[playing,step,speed]);
   function choose(index:number){
@@ -44,7 +44,7 @@ export function PicWorkbench() {
     const a=document.createElement("a");a.href=url;a.download="pic-design-request.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
   return <div className="pic-app">
-    <header className="pic-header"><Link href="/" className="pic-brand"><Waves size={21}/><strong>CIRCUITMIND</strong><span>PIC ENGINEERING</span></Link><nav aria-label="设计领域"><Link href="/">意图理解</Link><Link href="/pic" aria-current="page">PIC 光子设计</Link><a href="#repair">版图修复</a></nav><a className="pic-repo" href="https://github.com/Zihan-HE/PCB-Agent-Studio" target="_blank" rel="noreferrer">GitHub ↗</a></header>
+    <header className="pic-header"><Link href="/" className="pic-brand"><Waves size={21}/><strong>CIRCUITMIND</strong><span>PIC ENGINEERING</span></Link><nav aria-label="设计领域"><Link href="/">意图理解</Link><Link href="/pic" aria-current="page">PIC 设计与修复</Link></nav><a className="pic-repo" href="https://github.com/Zihan-HE/PCB-Agent-Studio" target="_blank" rel="noreferrer">GitHub ↗</a></header>
     <main className="pic-shell">
       <div className="pic-title"><div><span>WORKSPACE / PHOTONICS</span><h1>AI辅助PIC设计和验证展示</h1></div><p>从设计需求，到器件放置、波导连接与完整 GDS。<small>保存案例演示 · 基于真实 GDS 层级重建</small></p></div>
       <section className="pic-workspace">
@@ -68,15 +68,15 @@ export function PicWorkbench() {
             <div className="pic-layer-options"><label><input type="checkbox" checked={showLabels} onChange={e=>setShowLabels(e.target.checked)}/>单元标注</label><button onClick={()=>setVisible(["1/0"])}>只看光路</button><button onClick={()=>setVisible(geometry?.layers.map(l=>l.id)??[])}>显示全部图层</button></div>
             <div className="pic-properties"><h3>设计属性</h3>{sample.parameters.map(([key,value])=><div key={key}><span>{key}</span><b>{value}</b></div>)}<div><span>边界尺寸</span><b>{geometry?`${((geometry.bounds[1][0]-geometry.bounds[0][0])*geometry.unitMeters*1e6).toFixed(1)} × ${((geometry.bounds[1][1]-geometry.bounds[0][1])*geometry.unitMeters*1e6).toFixed(1)}`:"—"} μm</b></div></div>
           </aside></div>
-          <div className="pic-artifact-bar"><span><i/>{step===4?"完整设计":STAGES[step].name}<small>{geometry?.polygonCount.toLocaleString("en-US")??"—"} polygons / {geometry?.layers.length??"—"} layers</small></span><a href={assetPath(`/pic/${sample.id}.gds`)} download={`${sample.id}.gds`}><ArrowDownToLine size={14}/>下载完整 GDS <small>{geometry?`${(geometry.bytes/1024).toFixed(1)} KB`:""}</small></a></div>
+          <div className="pic-artifact-bar"><span><i/>{step===6?"完整设计":STAGES[step].name}<small>{geometry?.polygonCount.toLocaleString("en-US")??"—"} polygons / {geometry?.layers.length??"—"} layers</small></span><a href={assetPath(`/pic/${sample.id}.gds`)} download={`${sample.id}.gds`}><ArrowDownToLine size={14}/>下载完整 GDS <small>{geometry?`${(geometry.bytes/1024).toFixed(1)} KB`:""}</small></a></div>
         </div>
       </section>
-      <section className="pic-process"><div className="pic-process-heading"><div><strong>设计过程</strong><span aria-live="polite">{playing?"播放中":step===4?"已到最终版图":"可选择阶段查看"} · {step+1} / 5</span></div><div className="pic-playback"><label>速度<select aria-label="播放速度" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option></select></label><button aria-label={playing?"暂停回放":"继续回放"} disabled={!geometry} onClick={()=>{if(step===4)setStep(0);setPlaying(!playing);setTab("layout");}}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?"暂停":"播放"}</button><button aria-label="下一步" disabled={step===4||!geometry} onClick={()=>{setPlaying(false);setStep(s=>Math.min(4,s+1));setTab("layout");}}><StepForward size={14}/>单步</button><button aria-label="重置过程" onClick={()=>{setStep(0);setPlaying(false);setTab("layout");}}><RotateCcw size={14}/></button></div></div>
+      <section className="pic-process"><div className="pic-process-heading"><div><strong>设计过程</strong><span aria-live="polite">{playing?"播放中":step===6?"已到最终版图":"可选择阶段查看"} · {step+1} / 7</span></div><div className="pic-playback"><label>速度<select aria-label="播放速度" value={speed} onChange={e=>setSpeed(Number(e.target.value))}><option value={.5}>0.5×</option><option value={1}>1×</option><option value={2}>2×</option></select></label><button aria-label={playing?"暂停回放":"继续回放"} disabled={!geometry} onClick={()=>{if(step===6)setStep(0);setPlaying(!playing);setTab("layout");}}>{playing?<Pause size={14}/>:<Play size={14}/>} {playing?"暂停":"播放"}</button><button aria-label="下一步" disabled={step===6||!geometry} onClick={()=>{setPlaying(false);setStep(s=>Math.min(6,s+1));setTab("layout");}}><StepForward size={14}/>单步</button><button aria-label="重置过程" onClick={()=>{setStep(0);setPlaying(false);setTab("layout");}}><RotateCcw size={14}/></button></div></div>
         <ol>{STAGES.map((stage,index)=><li key={stage.name}><button className={step===index?"current":step>index?"complete":""} aria-current={step===index?"step":undefined} onClick={()=>{setStep(index);setPlaying(false);setTab("layout");}}><span>{step>index?<Check size={13}/>:String(index+1).padStart(2,"0")}</span><div><strong>{stage.name}</strong><small>{stage.detail}</small></div></button></li>)}</ol>
-        <div className="pic-event-log"><code>{String(step+1).padStart(2,"0")} / {STAGES[step].english}</code><p>{sample.events[step]}</p><span>几何构建演示</span></div>
+        <div className="pic-event-log"><code>{String(step+1).padStart(2,"0")} / {STAGES[step].english}</code><p>{sample.id==='filterbank'?sample.events[step]:STAGES[step].detail}</p><span>几何构建演示</span></div>
       </section>
       <RepairShowcase />
-      <details className="pic-credits"><summary>项目说明与开源来源</summary><p>项目组实现网页工作台、分层查看、构建过程演示及 GDS 交付。参考设计基于 <a href="https://github.com/ACADLab/PICasso" target="_blank" rel="noreferrer">PICasso（ACADLab）</a> 和 gdsfactory；<a href={assetPath("/pic/PICasso-LICENSE.txt")}>MIT 许可</a>。MZM、8-QAM 为作者 notebook 的本地回放，圆形微环为本地参数化 GDS。设计过程由最终 GDS 重建；修复部分展示 SpecPDA 已归档的实际运行结果。</p></details>
+      <details className="pic-credits"><summary>项目说明</summary><p>SpecPDA 是项目组设计的版图修复流程，展示内容包括缺陷定位、局部几何修改与复检。设计区提供参数化电路、层级结构和 GDS 交付；修复区选取结构不同且已完成修复的代表案例。设计动画按保存几何重建，修复动画使用实际归档输入与输出。</p></details>
     </main><footer className="pic-footer"><span>CircuitMind / Photonic Design</span><span>GDSII · μm · generic_tech</span><Link href="/">PCB 工作台 ↗</Link></footer>
   </div>;
 }

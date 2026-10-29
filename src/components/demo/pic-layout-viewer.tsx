@@ -19,6 +19,7 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
   const centerX = (x0+x1)/2, centerY = -(y0+y1)/2;
   const labelSize = Math.max(width,height)/58;
   const unit = geometry.unitMeters*1e6;
+  const geometryStep=[0,1,2,2,3,4,4][step];
   const scaleLength = width >= 200 ? 100 : width >= 50 ? 20 : 5;
   const segments = useMemo(() => geometry.layers.flatMap(layer => {
     const buckets = new Map<string, { stage: number; band: number; paths: string[]; count: number }>();
@@ -34,7 +35,8 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
     });
     return [...buckets.values()].map(bucket => ({ ...bucket,layer:layer.id,d:bucket.paths.join("") }));
   }).sort((a,b) => Number(a.layer === "1/0")-Number(b.layer === "1/0")),[geometry,width,x0]);
-  const visibleCount = segments.filter(s => s.stage <= step && visible.includes(s.layer)).reduce((sum,s) => sum+s.count,0);
+  const shown=segments.filter(s=>s.stage<=geometryStep&&visible.includes(s.layer)&&!(step===2&&s.stage===2&&s.band>3));
+  const visibleCount = shown.reduce((sum,s) => sum+s.count,0);
   return <div className="pic-viewer" data-design-stage={step} data-visible-polygons={visibleCount}>
     <div className="pic-canvas-caption"><span>TOP / {geometry.cell}</span><span>{step === 0 ? "PLACEMENT OUTLINE" : STAGES[step].english.toUpperCase()}</span></div>
     <svg className="pic-geometry" viewBox={`${x0-padding} ${-y1-padding} ${viewWidth} ${viewHeight}`} role="img" aria-label={`${STAGES[step].name}阶段的真实 GDS 几何`} onPointerDown={e => {
@@ -50,7 +52,7 @@ export function LayoutViewer({ geometry, visible, step, playing, zoom, setZoom, 
     }} onPointerUp={() => {drag.current=null;}} onPointerCancel={() => {drag.current=null;}} onPointerLeave={() => setCursor(null)}>
       <defs>{geometry.layers.map(layer => <pattern key={layer.id} id={`${id}-${layer.id.replace("/","-")}`} patternUnits="userSpaceOnUse" width={width/65} height={width/65} patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2={width/65} stroke={layerStyle(layer.id).color} strokeWidth={width/450}/></pattern>)}</defs>
       <g transform={`translate(${pan.x} ${pan.y}) translate(${centerX} ${centerY}) scale(${zoom}) translate(${-centerX} ${-centerY})`}>
-        {segments.filter(segment => segment.stage <= step && visible.includes(segment.layer)).map(segment => <g key={`${segment.layer}-${segment.stage}-${segment.band}`} className={segment.stage===step&&playing ? "pic-build-piece" : ""} style={{animationDelay:`${segment.band*90}ms`}}>
+        {shown.map(segment => <g key={`${segment.layer}-${segment.stage}-${segment.band}`} className={segment.stage===geometryStep&&playing ? "pic-build-piece" : ""} style={{animationDelay:`${segment.band*90}ms`}}>
           <path d={segment.d} fill={segment.layer==="1/0" ? layerStyle(segment.layer).color : `url(#${id}-${segment.layer.replace("/","-")})`} fillRule="nonzero" stroke={layerStyle(segment.layer).color} strokeWidth={segment.layer==="1/0" ? .6 : .35} vectorEffect="non-scaling-stroke" opacity={segment.layer==="1/0" ? 1 : .72}/>
         </g>)}
         {(step===0||showLabels)&&geometry.parts.map(part => {

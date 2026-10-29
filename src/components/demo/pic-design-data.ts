@@ -20,14 +20,23 @@ export const CASES = [
     notes: "作者 notebook 的本地参考回放。版图本身未验证星座、误码率或传输性能。",
     events: ["提取三个 MZI 模块与四个顶层 MMI 的实际位置。", "实例化各模块的光学器件，显示分合束和移相单元。", "逐段加入模块内及模块间的真实波导几何。", "叠加各移相单元的工艺图层。", "显示完整多模块电路，支持分层查看与 GDS 下载。"],
   },
+  {
+    id: "filterbank", name: "八微环级联滤波电路", code: "SCISSOR_08", tag: "Circuit / Resonator array",
+    prompt: "构建八微环级联滤波电路：共用 0.5 μm 宽总线，环半径从 8 μm 递增至 9.75 μm，耦合间隙 0.2 μm，生成层级化 GDS 并核对几何与图层。",
+    parameters: [["拓扑", "SCISSOR / 8 rings"], ["半径范围", "8–9.75 μm"], ["总线宽度", "0.5 μm"]],
+    notes: "本地参数化八微环级联结构。每个微环为独立层级单元，共用总线；GDS 已导出并读取核对。光谱性能尚未仿真。",
+    events: ["解析环数、半径、间距和总线宽度。", "实例化八个独立微环单元。", "按总线方向展开器件及互连。", "生成总线并连接输入输出光路。", "展开实际图层和单元层级。", "核对几何边界、单元数量与 GDS 可读性。", "导出完整层级 GDS，保留设计参数。"],
+  },
 ] as const;
 
 export const STAGES = [
-  { name: "结构规划", english: "Floorplan", detail: "定位器件范围与层级" },
-  { name: "器件放置", english: "Devices", detail: "实例化光学器件" },
-  { name: "波导连接", english: "Routing", detail: "构建完整光路" },
-  { name: "工艺图层", english: "Process layers", detail: "叠加辅助与工艺层" },
-  { name: "版图交付", english: "GDS export", detail: "查看完整设计产物" },
+  { name: "规格解析", english: "Specification", detail: "核对参数与电路拓扑" },
+  { name: "器件实例", english: "Instances", detail: "构建层级化器件单元" },
+  { name: "互连展开", english: "Interconnect", detail: "分段展开波导几何" },
+  { name: "波导布线", english: "Routing", detail: "显示完整连接路径" },
+  { name: "工艺图层", english: "Layers", detail: "展开工艺层与辅助层" },
+  { name: "几何核对", english: "Geometry", detail: "读取尺寸与单元边界" },
+  { name: "GDS 交付", english: "Export", detail: "导出层级 GDS 与参数" },
 ] as const;
 
 export type Geometry = {
